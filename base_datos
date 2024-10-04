@@ -1,0 +1,96 @@
+CREATE DATABASE IF NOT EXISTS adopet;
+USE adopet;
+
+
+CREATE TABLE IF NOT EXISTS roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS mascotas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    tipo VARCHAR (55),
+    raza VARCHAR(255),
+    edad INT NOT NULL,
+    descripcion TEXT
+);
+
+
+CREATE TABLE IF NOT EXISTS campaña (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    tipo VARCHAR(50),
+    descripcion TEXT,
+    fecha_inicio DATE,
+    fecha_fin DATE
+);
+
+CREATE TABLE contactanos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    mensaje TEXT NOT NULL
+);
+
+
+CREATE TABLE donaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    opcion_donacion ENUM('comida', 'juguete') NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    tarjeta VARCHAR(20) NOT NULL,
+    mes INT(4) NOT NULL,
+    anio INT(5) NOT NULL,
+    cvv VARCHAR(4) NOT NULL,
+    fecha_donacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCAHR(100), NOT NULL
+    email VARCHAR(255) NOT NULL UNIQUE,
+    contraseña VARCHAR(255) NOT NULL,
+    rol_id INT NOT NULL,
+    FOREIGN KEY (rol_id) REFERENCES roles(id)
+);
+
+
+CREATE TABLE preguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    pregunta TEXT NOT NULL,
+    respuesta TEXT,
+    fecha_pregunta DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_respuesta DATETIME,
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
+);
+
+CREATE TABLE MascotasGuardadas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    mascota_id INT,
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id),
+    FOREIGN KEY (mascota_id) REFERENCES Mascotas(id)
+);
+
+CREATE TABLE solicitudes_adopcion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    mascota_id INT,
+    fecha_solicitud DATETIME DEFAULT CURRENT_TIMESTAMP,
+    motivo TEXT,
+    estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id),
+    FOREIGN KEY (mascota_id) REFERENCES Mascotas(id)
+);
+
+INSERT INTO roles (nombre) VALUES ('usuario'), ('administrador');
+
+
