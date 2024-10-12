@@ -94,3 +94,7 @@ CREATE TABLE solicitudes_adopcion (
 INSERT INTO roles (nombre) VALUES ('usuario'), ('administrador');
 
 
+
+
+
+
